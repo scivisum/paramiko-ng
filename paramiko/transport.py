@@ -1039,10 +1039,10 @@ class Transport(threading.Thread, ClosingContextManager):
             0 to disable keepalives).
         """
         def _request(x=weakref.proxy(self)):
-            return x.global_request('keepalive@lag.net', wait=False)
+            return x.global_request('keepalive@lag.net', wait=False, need_response=True)
         self.packetizer.set_keepalive(interval, _request)
 
-    def global_request(self, kind, data=None, wait=True):
+    def global_request(self, kind, data=None, wait=True, need_response=None):
         """
         Make a global request to the remote host.  These are normally
         extensions to the SSH2 protocol.
@@ -1054,17 +1054,23 @@ class Transport(threading.Thread, ClosingContextManager):
         :param bool wait:
             ``True`` if this method should not return until a response is
             received; ``False`` otherwise.
+        :param bool need_response:
+            ``True`` if response should be requested; ``False`` otherwise.
         :return:
             a `.Message` containing possible additional data if the request was
             successful (or an empty `.Message` if ``wait`` was ``False``);
             ``None`` if the request was denied.
         """
+        if need_response is None:
+            need_response = wait
+        if not need_response and wait:
+            raise Exception('Waiting is enabled while response is not requested')
         if wait:
             self.completion_event = threading.Event()
         m = Message()
         m.add_byte(cMSG_GLOBAL_REQUEST)
         m.add_string(kind)
-        m.add_boolean(wait)
+        m.add_boolean(need_response)
         if data is not None:
             m.add(*data)
         self._log(DEBUG, 'Sending global request "{}"'.format(kind))
@@ -1930,7 +1936,6 @@ class Transport(threading.Thread, ClosingContextManager):
                         if (ptype >= 30) and (ptype <= 41):
                             self.kex_engine.parse_next(ptype, m)
                             continue
-
                     if ptype in self._handler_table:
                         error_msg = self._ensure_authed(ptype, m)
                         if error_msg:
