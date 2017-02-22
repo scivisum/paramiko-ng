@@ -33,7 +33,7 @@ except ImportError:
 
 from paramiko.dsskey import DSSKey
 from paramiko.rsakey import RSAKey
-from paramiko.util import get_logger, constant_time_bytes_eq
+from paramiko.util import get_logger
 from paramiko.ecdsakey import ECDSAKey
 from paramiko.ssh_exception import SSHException
 
@@ -57,10 +57,33 @@ class HostKeys (MutableMapping):
 
         :param str filename: filename to load host keys from, or ``None``
         """
-        # emulate a dict of { hostname: { keytype: PKey } }
-        self._entries = []
+        # emulate dict of { hostname: { keytype: PKey } }
+        self._entries = []  # list of (one-or-more hostnames, one key) (like known_hosts)
+        self._index   = {}  # for faster lookup: { hostname: [entries...] }
+        self._hashed  = {}  # hashed hostnames: { hashed: [salt, entries...] }
         if filename is not None:
             self.load(filename)
+
+    def _add_entry(self, e):
+        self._entries.append(e)
+
+        for h in e.hostnames:
+            if h.startswith('|1|'):
+                if h in self._hashed:
+                    self._hashed[h].append(e)
+                else:
+                    parts = h.split('|')
+                    if len(parts) != 3 or len(parts[2]) != sha1().digest_size:
+                        continue  # skip invalid
+                    salt = decodebytes(b(parts[2]))
+                    self._hashed[h] = [salt, e]
+
+            else:  # not hashed
+                ol = self._index.get(h)
+                if ol:
+                    ol.append(e)
+                else:
+                    self._index[h] = [e]
 
     def add(self, hostname, keytype, key):
         """
@@ -68,14 +91,16 @@ class HostKeys (MutableMapping):
         ``(hostname, keytype)`` pair will be replaced.
 
         :param str hostname: the hostname (or IP) to add
-        :param str keytype: key type (``"ssh-rsa"`` or ``"ssh-dss"``)
+        :param str keytype: host key type
         :param .PKey key: the key to add
         """
-        for e in self._entries:
-            if (hostname in e.hostnames) and (e.key.get_name() == keytype):
+        for e in self._index.get(hostname, []):
+            if e.key.get_name() == keytype:
                 e.key = key
                 return
-        self._entries.append(HostKeyEntry([hostname], key))
+
+        e = HostKeyEntry([hostname], key)
+        self._add_entry(e)
 
     def load(self, filename):
         """
@@ -107,7 +132,7 @@ class HostKeys (MutableMapping):
                         if self.check(h, e.key):
                             e.hostnames.remove(h)
                     if len(e.hostnames):
-                        self._entries.append(e)
+                        self._add_entry(e)
 
     def save(self, filename):
         """
@@ -172,22 +197,31 @@ class HostKeys (MutableMapping):
                         e.key = val
                         break
                 else:
-                    # add a new one
                     e = HostKeyEntry([hostname], val)
                     self._entries.append(e)
-                    self._hostkeys._entries.append(e)
+                    self._hostkeys._add_entry(e)
 
             def keys(self):
                 return [e.key.get_name() for e in self._entries if e.key is not None]
 
-        entries = []
-        for e in self._entries:
-            for h in e.hostnames:
-                if h.startswith('|1|') and not hostname.startswith('|1|') and constant_time_bytes_eq(self.hash_host(hostname, h), h) or h == hostname:
-                    entries.append(e)
-        if len(entries) == 0:
+        if hostname.startswith('|1|'):
+            # if looking up hash, only check for exact duplicate of hash/salt
+            if hostname in self._hashed:
+                results = self._hashed[hostname][1:]  # skip salt
+                return SubDict(hostname, results, self)
             return None
-        return SubDict(hostname, entries, self)
+
+        results = []
+        for e in self._index.get(hostname, []):
+            results.append(e)
+        for h, ol in self._hashed:
+            if self.hash_host(hostname, ol[0]) == h:
+                for e in ol[1:]:
+                    results.append(e)
+
+        if len(results) == 0:
+            return None
+        return SubDict(hostname, results, self)
 
     def check(self, hostname, key):
         """
@@ -212,6 +246,8 @@ class HostKeys (MutableMapping):
         Remove all host keys from the dictionary.
         """
         self._entries = []
+        self._index   = {}
+        self._hashed  = {}
 
     def __iter__(self):
         for k in self.keys():
@@ -221,7 +257,10 @@ class HostKeys (MutableMapping):
         return len(self.keys())
 
     def __delitem__(self, key):
-        k = self[key]
+        ret = self.lookup(key)
+        if ret is None:
+            raise KeyError(key)
+        # delete not implemented
 
     def __getitem__(self, key):
         ret = self.lookup(key)
@@ -242,16 +281,10 @@ class HostKeys (MutableMapping):
                     e.key = entry[key_type]
                     found = True
             if not found:
-                self._entries.append(HostKeyEntry([hostname], entry[key_type]))
+                self._add_entry(HostKeyEntry([hostname], entry[key_type]))
 
     def keys(self):
-        # Python 2.4 sets would be nice here.
-        ret = []
-        for e in self._entries:
-            for h in e.hostnames:
-                if h not in ret:
-                    ret.append(h)
-        return ret
+        return list(self._index.keys()) + list(self._hashed.keys())
 
     def values(self):
         ret = []
