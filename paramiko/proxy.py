@@ -18,12 +18,11 @@
 
 
 import os
-from select import select
 import socket
 import time
 
 from paramiko.ssh_exception import ProxyCommandFailure
-from paramiko.util import ClosingContextManager
+from paramiko.util import ClosingContextManager, wait_until_readable
 
 
 class ProxyCommand(ClosingContextManager):
@@ -93,9 +92,8 @@ class ProxyCommand(ClosingContextManager):
                         raise socket.timeout()
                     select_timeout = self.timeout - elapsed
 
-                r, w, x = select(
-                    [self.process.stdout], [], [], select_timeout)
-                if r and r[0] == self.process.stdout:
+                if wait_until_readable([self.process.stdout.fileno()],
+                                       select_timeout):
                     buffer += os.read(
                         self.process.stdout.fileno(), size - len(buffer))
             return buffer
