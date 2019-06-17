@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installing &#8212; Paramiko-NG  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Frequently Asked/Answered Questions" href="faq.html" />
+    <link rel="prev" title="Exceptions" href="api/ssh_exception.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="installing">
+<h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="paramiko-ng-itself">
+<h2>Paramiko-NG itself<a class="headerlink" href="#paramiko-ng-itself" title="Permalink to this headline">¶</a></h2>
+<p>The recommended way to get Paramiko is to <strong>install the latest stable release</strong>
+via <a class="reference external" href="http://pip-installer.org">pip</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install paramiko-ng
+</pre></div>
+</div>
+<p>You can also install under the original “paramiko” pip-package-name,
+in order to satisfy requirements for other packages (replace “2.7.0” with desired release):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PARAMIKO_REPLACE=1 pip install https://github.com/ploxiln/paramiko-ng/archive/2.7.0.tar.gz#egg=paramiko
+</pre></div>
+</div>
+<p>We currently support <strong>Python 2.7, 3.4+, and PyPy</strong>. Users on Python 2.6 or
+older (or 3.3 or older) are urged to upgrade.</p>
+<p>Paramiko-NG has only a few direct dependencies:</p>
+<ul class="simple">
+<li>The big one, with its own sub-dependencies, is Cryptography; see <a class="reference internal" href="#cryptography"><span class="std std-ref">its
+specific note below</span></a> for more details.</li>
+<li><a class="reference external" href="https://pypi.org/project/bcrypt/">bcrypt</a>, for “new openssh format” private keys</li>
+<li><a class="reference external" href="https://pypi.org/project/PyNaCl/">pynacl</a>, optional, for Ed25519 key support</li>
+</ul>
+<p>If you need GSS-API / SSPI support, see <a class="reference internal" href="#gssapi"><span class="std std-ref">the below subsection on it</span></a> for details on its optional dependencies.</p>
+</div>
+<div class="section" id="cryptography">
+<span id="id1"></span><h2>Cryptography<a class="headerlink" href="#cryptography" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://cryptography.io">Cryptography</a>  provides the low-level (C-based)
+encryption algorithms we need to implement the SSH protocol. It has detailed
+<a class="reference external" href="https://cryptography.io/en/latest/installation/">installation instructions</a> (and an <a class="reference external" href="https://cryptography.io/en/latest/faq/">FAQ</a>) which you should read carefully.</p>
+<p>In general, you’ll need one of the following setups:</p>
+<ul class="simple">
+<li>On Windows or Mac OS X, provided your <code class="docutils literal notranslate"><span class="pre">pip</span></code> is modern (8.x+): nothing else
+is required. <code class="docutils literal notranslate"><span class="pre">pip</span></code> will install statically compiled binary archives of
+Cryptography &amp; its dependencies.</li>
+<li>On Linux, or on other platforms with older versions of <code class="docutils literal notranslate"><span class="pre">pip</span></code>: you’ll need a
+C build toolchain, plus development headers for Python, OpenSSL and
+<code class="docutils literal notranslate"><span class="pre">libffi</span></code>. Again, see <a class="reference external" href="https://cryptography.io/en/latest/installation/">Cryptography’s install docs</a>; these requirements may
+occasionally change.</li>
+</ul>
+</div>
+<div class="section" id="optional-dependencies-for-gss-api-sspi-kerberos">
+<span id="gssapi"></span><h2>Optional dependencies for GSS-API / SSPI / Kerberos<a class="headerlink" href="#optional-dependencies-for-gss-api-sspi-kerberos" title="Permalink to this headline">¶</a></h2>
+<p>In order to use GSS-API/Kerberos &amp; related functionality, a couple of
+additional dependencies are required (these are not listed in our <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>
+due to their infrequent utility &amp; non-platform-agnostic requirements):</p>
+<ul class="simple">
+<li>It hopefully goes without saying but <strong>all platforms</strong> need <strong>a working
+installation of GSS-API itself</strong>, e.g. Heimdal.</li>
+<li><strong>Unix</strong> needs <a class="reference external" href="https://pypi.org/project/gssapi/">gssapi</a></li>
+<li><strong>Windows</strong> needs <a class="reference external" href="https://pypi.python.org/pypi/pywin32">pywin32</a> <code class="docutils literal notranslate"><span class="pre">2.1.8</span></code>
+or better.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you use Microsoft SSPI for kerberos authentication and credential
+delegation, make sure that the target host is trusted for delegation in the
+active directory configuration. For details see:
+<a class="reference external" href="http://technet.microsoft.com/en-us/library/cc738491%28v=ws.10%29.aspx">http://technet.microsoft.com/en-us/library/cc738491%28v=ws.10%29.aspx</a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Paramiko-NG</a></h1>
+
+
+
+<p class="blurb">A Python implementation of SSHv2.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ploxiln&repo=paramiko-ng&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a class="badge" href="https://travis-ci.org/ploxiln/paramiko-ng">
+    <img
+        alt="https://secure.travis-ci.org/ploxiln/paramiko-ng.svg?branch=master"
+        src="https://secure.travis-ci.org/ploxiln/paramiko-ng.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/channel.html">Channel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/message.html">Message</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/packet.html">Packetizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/transport.html">Transport</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/agent.html">SSH agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/hostkeys.html">Host keys / <code class="docutils literal notranslate"><span class="pre">known_hosts</span></code> files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/keys.html">Key handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/ssh_gss.html">GSS-API authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/kex_gss.html">GSS-API key exchange</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/proxy.html"><code class="docutils literal notranslate"><span class="pre">ProxyCommand</span></code> support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/server.html">Server implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/sftp.html">SFTP</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/buffered_pipe.html">Buffered pipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/file.html">Buffered files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pipe.html">Cross-platform pipe implementations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/ssh_exception.html">Exceptions</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#paramiko-ng-itself">Paramiko-NG itself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cryptography">Cryptography</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-dependencies-for-gss-api-sspi-kerberos">Optional dependencies for GSS-API / SSPI / Kerberos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked/Answered Questions</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Paramiko contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/installing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
