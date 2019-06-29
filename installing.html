@@ -51,10 +51,9 @@ in order to satisfy requirements for other packages (replace “2.7.0” with de
 older (or 3.3 or older) are urged to upgrade.</p>
 <p>Paramiko-NG has only a few direct dependencies:</p>
 <ul class="simple">
-<li>The big one, with its own sub-dependencies, is Cryptography; see <a class="reference internal" href="#cryptography"><span class="std std-ref">its
-specific note below</span></a> for more details.</li>
+<li>The big one is Cryptography; see <a class="reference internal" href="#cryptography"><span class="std std-ref">its specific note below</span></a> for more details.</li>
 <li><a class="reference external" href="https://pypi.org/project/bcrypt/">bcrypt</a>, for “new openssh format” private keys</li>
-<li><a class="reference external" href="https://pypi.org/project/PyNaCl/">pynacl</a>, optional, for Ed25519 key support</li>
+<li><a class="reference external" href="https://pypi.org/project/PyNaCl/">pynacl</a>, <em>optional</em> for Ed25519 key support</li>
 </ul>
 <p>If you need GSS-API / SSPI support, see <a class="reference internal" href="#gssapi"><span class="std std-ref">the below subsection on it</span></a> for details on its optional dependencies.</p>
 </div>
@@ -62,7 +61,8 @@ specific note below</span></a> for more details.</li>
 <span id="id1"></span><h2>Cryptography<a class="headerlink" href="#cryptography" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://cryptography.io">Cryptography</a>  provides the low-level (C-based)
 encryption algorithms we need to implement the SSH protocol. It has detailed
-<a class="reference external" href="https://cryptography.io/en/latest/installation/">installation instructions</a> (and an <a class="reference external" href="https://cryptography.io/en/latest/faq/">FAQ</a>) which you should read carefully.</p>
+<a class="reference external" href="https://cryptography.io/en/latest/installation/">installation instructions</a> (and an <a class="reference external" href="https://cryptography.io/en/latest/faq/">FAQ</a>)
+which you should read carefully.</p>
 <p>In general, you’ll need one of the following setups:</p>
 <ul class="simple">
 <li>On Windows or Mac OS X, provided your <code class="docutils literal notranslate"><span class="pre">pip</span></code> is modern (8.x+): nothing else
@@ -80,11 +80,10 @@ occasionally change.</li>
 additional dependencies are required (these are not listed in our <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>
 due to their infrequent utility &amp; non-platform-agnostic requirements):</p>
 <ul class="simple">
-<li>It hopefully goes without saying but <strong>all platforms</strong> need <strong>a working
-installation of GSS-API itself</strong>, e.g. Heimdal.</li>
-<li><strong>Unix</strong> needs <a class="reference external" href="https://pypi.org/project/gssapi/">gssapi</a></li>
-<li><strong>Windows</strong> needs <a class="reference external" href="https://pypi.python.org/pypi/pywin32">pywin32</a> <code class="docutils literal notranslate"><span class="pre">2.1.8</span></code>
-or better.</li>
+<li>All platforms need <strong>a working installation of GSS-API itself</strong>, e.g. Heimdal.</li>
+<li>All platforms need <a class="reference external" href="https://pypi.org/project/pyasn1/">pyasn1</a> <code class="docutils literal notranslate"><span class="pre">0.1.7</span></code> or later.</li>
+<li><strong>Unix</strong> needs <a class="reference external" href="https://pypi.org/project/gssapi/">gssapi</a> <code class="docutils literal notranslate"><span class="pre">1.4.1</span></code> or later.</li>
+<li><strong>Windows</strong> needs <a class="reference external" href="https://pypi.python.org/pypi/pywin32">pywin32</a> <code class="docutils literal notranslate"><span class="pre">2.1.8</span></code> or later.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
