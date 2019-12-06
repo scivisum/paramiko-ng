@@ -136,6 +136,11 @@ data.</p>
 object.  If the private key is encrypted and <code class="docutils literal notranslate"><span class="pre">password</span></code> is not
 <code class="docutils literal notranslate"><span class="pre">None</span></code>, the given password will be used to decrypt the key (otherwise
 <a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.PasswordRequiredException" title="paramiko.ssh_exception.PasswordRequiredException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PasswordRequiredException</span></code></a> is thrown).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is recommended to use the key-type-agnostic <a class="reference internal" href="keys.html#paramiko.pkey.load_private_key" title="paramiko.pkey.load_private_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_private_key</span></code></a>
+function instead.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -172,6 +177,11 @@ will be used to decrypt the key (otherwise <a class="reference internal" href="s
 is thrown).  Through the magic of Python, this factory method will
 exist in all subclasses of PKey (such as <a class="reference internal" href="keys.html#paramiko.rsakey.RSAKey" title="paramiko.rsakey.RSAKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RSAKey</span></code></a> or <a class="reference internal" href="keys.html#paramiko.dsskey.DSSKey" title="paramiko.dsskey.DSSKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DSSKey</span></code></a>), but
 is useless on the abstract PKey class.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is recommended to use the key-type-agnostic
+<a class="reference internal" href="keys.html#paramiko.pkey.load_private_key_file" title="paramiko.pkey.load_private_key_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_private_key_file</span></code></a> function instead.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
