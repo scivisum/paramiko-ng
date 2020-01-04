@@ -465,6 +465,11 @@ class KeyTest(unittest.TestCase):
         my_fp = hexlify(key.get_fingerprint())
         self.assertEqual(exp_fp, my_fp)
 
+    def test_leading_whitespace(self):
+        key1 = RSAKey.from_private_key(StringIO("\n\n" + RSA_PRIVATE_OUT + "\n\n"))
+        key2 = RSAKey.from_private_key(StringIO(RSA_PRIVATE_OUT))
+        self.assertEqual(key1.get_fingerprint(), key2.get_fingerprint())
+
     def test_salt_size(self):
         # Read an existing encrypted private key
         file_ = _support('test_rsa_password.key')

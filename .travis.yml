@@ -6,6 +6,7 @@ cache:
 branches:
   only:
   - master
+  - 2.6
 notifications:
   email: false
 
