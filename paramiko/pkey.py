@@ -325,18 +325,17 @@ class PKey(object):
             data = self._read_private_key_new_format(typepfx, lines[start:end], password)
             pkformat = self.FORMAT_OPENSSH
         elif keytype == tag:
-            data = self._read_private_key_old_format(lines, end, password)
+            data = self._read_private_key_old_format(lines[start:end], password)
             pkformat = self.FORMAT_ORIGINAL
         else:
             raise SSHException('encountered {} key, expected {} key'.format(keytype, tag))
 
         return pkformat, data
 
-    def _read_private_key_old_format(self, lines, end, password):
-        start = 0
+    def _read_private_key_old_format(self, lines, password):
         # parse any headers first
+        start = 0
         headers = {}
-        start += 1
         while start < len(lines):
             l = lines[start].split(': ')
             if len(l) == 1:
@@ -345,7 +344,7 @@ class PKey(object):
             start += 1
         # if we trudged to the end of the file, just try to cope.
         try:
-            data = decodebytes(b(''.join(lines[start:end])))
+            data = decodebytes(b(''.join(lines[start:])))
         except base64.binascii.Error as e:
             raise SSHException('base64 decoding error: ' + str(e))
         if 'proc-type' not in headers:
