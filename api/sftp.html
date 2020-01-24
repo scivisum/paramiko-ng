@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Buffered pipes" href="buffered_pipe.html" />
@@ -352,12 +353,12 @@ depend on the SFTP server implementation.</p>
 
 <dl class="method">
 <dt id="paramiko.sftp_client.SFTPClient.listdir_iter">
-<code class="descname">listdir_iter</code><span class="sig-paren">(</span><em>path='.'</em>, <em>read_aheads=50</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.sftp_client.SFTPClient.listdir_iter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">listdir_iter</code><span class="sig-paren">(</span><em>path='.'</em>, <em>read_aheads=10</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.sftp_client.SFTPClient.listdir_iter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator version of <a class="reference internal" href="#paramiko.sftp_client.SFTPClient.listdir_attr" title="paramiko.sftp_client.SFTPClient.listdir_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">listdir_attr</span></code></a>.</p>
 <p>See the API docs for <a class="reference internal" href="#paramiko.sftp_client.SFTPClient.listdir_attr" title="paramiko.sftp_client.SFTPClient.listdir_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">listdir_attr</span></code></a> for overall details.</p>
 <p>This function adds one more kwarg on top of <a class="reference internal" href="#paramiko.sftp_client.SFTPClient.listdir_attr" title="paramiko.sftp_client.SFTPClient.listdir_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">listdir_attr</span></code></a>:
 <code class="docutils literal notranslate"><span class="pre">read_aheads</span></code>, an integer controlling how many
-<code class="docutils literal notranslate"><span class="pre">SSH_FXP_READDIR</span></code> requests are made to the server. The default of 50
+<code class="docutils literal notranslate"><span class="pre">SSH_FXP_READDIR</span></code> requests are made to the server. The default
 should suffice for most file listings as each request/response cycle
 may contain multiple files (dependent on server implementation.)</p>
 <div class="versionadded">
@@ -2054,7 +2055,7 @@ link.</li>
       &copy;Paramiko contributors.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

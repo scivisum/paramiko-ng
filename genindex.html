@@ -14,6 +14,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -89,8 +90,6 @@
         <li><a href="api/channel.html#paramiko.channel.Channel.__init__">(paramiko.channel.Channel method)</a>
 </li>
         <li><a href="api/channel.html#paramiko.channel.ChannelFile.__init__">(paramiko.channel.ChannelFile method)</a>
-</li>
-        <li><a href="api/channel.html#paramiko.channel.ChannelStderrFile.__init__">(paramiko.channel.ChannelStderrFile method)</a>
 </li>
         <li><a href="api/client.html#paramiko.client.SSHClient.__init__">(paramiko.client.SSHClient method)</a>
 </li>
@@ -425,6 +424,8 @@
 </li>
       <li><a href="api/channel.html#paramiko.channel.ChannelStderrFile">ChannelStderrFile (class in paramiko.channel)</a>
 </li>
+      <li><a href="api/channel.html#paramiko.channel.ChannelStdinFile">ChannelStdinFile (class in paramiko.channel)</a>
+</li>
       <li><a href="api/sftp.html#paramiko.sftp_handle.SFTPHandle.chattr">chattr() (paramiko.sftp_handle.SFTPHandle method)</a>
 
       <ul>
@@ -505,6 +506,8 @@
         <li><a href="api/buffered_pipe.html#paramiko.buffered_pipe.BufferedPipe.close">(paramiko.buffered_pipe.BufferedPipe method)</a>
 </li>
         <li><a href="api/channel.html#paramiko.channel.Channel.close">(paramiko.channel.Channel method)</a>
+</li>
+        <li><a href="api/channel.html#paramiko.channel.ChannelStdinFile.close">(paramiko.channel.ChannelStdinFile method)</a>
 </li>
         <li><a href="api/client.html#paramiko.client.SSHClient.close">(paramiko.client.SSHClient method)</a>
 </li>
@@ -950,6 +953,8 @@
       <li><a href="api/channel.html#paramiko.channel.Channel.makefile">makefile() (paramiko.channel.Channel method)</a>
 </li>
       <li><a href="api/channel.html#paramiko.channel.Channel.makefile_stderr">makefile_stderr() (paramiko.channel.Channel method)</a>
+</li>
+      <li><a href="api/channel.html#paramiko.channel.Channel.makefile_stdin">makefile_stdin() (paramiko.channel.Channel method)</a>
 </li>
       <li><a href="api/message.html#paramiko.message.Message">Message (class in paramiko.message)</a>
 </li>
@@ -1536,12 +1541,10 @@
 </li>
       <li><a href="api/buffered_pipe.html#paramiko.buffered_pipe.BufferedPipe.unlink_event">unlink_event() (paramiko.buffered_pipe.BufferedPipe method)</a>
 </li>
-      <li><a href="api/keys.html#paramiko.pkey.unpad">unpad() (in module paramiko.pkey)</a>
+      <li><a href="api/channel.html#paramiko.channel.Channel.update_environment">update_environment() (paramiko.channel.Channel method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/channel.html#paramiko.channel.Channel.update_environment">update_environment() (paramiko.channel.Channel method)</a>
-</li>
       <li><a href="api/transport.html#paramiko.transport.Transport.use_compression">use_compression() (paramiko.transport.Transport method)</a>
 </li>
       <li><a href="api/sftp.html#paramiko.sftp_client.SFTPClient.utime">utime() (paramiko.sftp_client.SFTPClient method)</a>
@@ -1735,7 +1738,7 @@
       &copy;Paramiko contributors.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Client" href="client.html" />
@@ -310,12 +311,34 @@ server, it only makes sense to open this file for writing.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#paramiko.channel.ChannelFile" title="paramiko.channel.ChannelFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChannelFile</span></code></a> object which can be used for Python file I/O.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#paramiko.channel.ChannelStderrFile" title="paramiko.channel.ChannelStderrFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChannelStderrFile</span></code></a> object which can be used for Python file I/O.</td>
 </tr>
 </tbody>
 </table>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 1.1.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="paramiko.channel.Channel.makefile_stdin">
+<code class="descname">makefile_stdin</code><span class="sig-paren">(</span><em>*params</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.Channel.makefile_stdin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a file-like object associated with this channel’s stdin
+stream.</p>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">mode</span></code> and <code class="docutils literal notranslate"><span class="pre">bufsize</span></code> arguments are interpreted the
+same way as by the built-in <code class="docutils literal notranslate"><span class="pre">file()</span></code> function in Python.  For a
+client, it only makes sense to open this file for writing.  For a
+server, it only makes sense to open this file for reading.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#paramiko.channel.ChannelStdinFile" title="paramiko.channel.ChannelStdinFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChannelStdinFile</span></code></a> object which can be used for Python file I/O.</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.6.</span></p>
 </div>
 </dd></dl>
 
@@ -910,10 +933,19 @@ flush the buffer.</p>
 <dl class="class">
 <dt id="paramiko.channel.ChannelStderrFile">
 <em class="property">class </em><code class="descclassname">paramiko.channel.</code><code class="descname">ChannelStderrFile</code><span class="sig-paren">(</span><em>channel</em>, <em>mode='r'</em>, <em>bufsize=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.ChannelStderrFile" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="paramiko.channel.ChannelStderrFile.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>channel</em>, <em>mode='r'</em>, <em>bufsize=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.ChannelStderrFile.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<dd><p>A file-like wrapper around <a class="reference internal" href="#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Channel</span></code></a> stderr.</p>
+<p>See <a class="reference internal" href="#paramiko.channel.Channel.makefile_stderr" title="paramiko.channel.Channel.makefile_stderr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Channel.makefile_stderr</span></code></a> for details.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="paramiko.channel.ChannelStdinFile">
+<em class="property">class </em><code class="descclassname">paramiko.channel.</code><code class="descname">ChannelStdinFile</code><span class="sig-paren">(</span><em>channel</em>, <em>mode='r'</em>, <em>bufsize=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.ChannelStdinFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A file-like wrapper around <a class="reference internal" href="#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Channel</span></code></a> stdin.</p>
+<p>See <a class="reference internal" href="#paramiko.channel.Channel.makefile_stdin" title="paramiko.channel.Channel.makefile_stdin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Channel.makefile_stdin</span></code></a> for details.</p>
+<dl class="method">
+<dt id="paramiko.channel.ChannelStdinFile.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.ChannelStdinFile.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the file.  Future read and write operations will fail.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1026,7 +1058,7 @@ flush the buffer.</p>
       &copy;Paramiko contributors.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
