@@ -193,19 +193,20 @@ class SSHClient (ClosingContextManager):
         password=None,
         pkey=None,
         key_filename=None,
-        timeout=None,
-        allow_agent=True,
         look_for_keys=True,
+        passphrase=None,
+        allow_agent=True,
+        timeout=None,
+        banner_timeout=None,
+        handshake_timeout=None,
+        auth_timeout=None,
         compress=False,
         sock=None,
         gss_auth=False,
         gss_kex=False,
         gss_deleg_creds=True,
         gss_host=None,
-        banner_timeout=None,
-        auth_timeout=None,
         gss_trust_dns=True,
-        passphrase=None,
     ):
         """
         Connect to an SSH server and authenticate to it.  The server's host key
@@ -254,13 +255,19 @@ class SSHClient (ClosingContextManager):
         :param str key_filename:
             the filename, or list of filenames, of optional private key(s)
             and/or certs to try for authentication
-        :param float timeout:
-            an optional timeout (in seconds) for the TCP connect
-        :param bool allow_agent:
-            set to False to disable connecting to the SSH agent
         :param bool look_for_keys:
             set to False to disable searching for discoverable private key
             files in ``~/.ssh/``
+        :param bool allow_agent:
+            set to False to disable connecting to the SSH agent
+        :param float timeout:
+            an optional timeout (in seconds) for the TCP connect
+        :param float banner_timeout: an optional timeout (in seconds) to wait
+            for the SSH banner to be presented.
+        :param float handshake_timeout: an optional timeout (in seconds) to wait
+            for the SSH handshake to finish after SSH banner exchange.
+        :param float auth_timeout: an optional timeout (in seconds) to wait for
+            an authentication response.
         :param bool compress: set to True to turn on compression
         :param socket sock:
             an open socket or socket-like object (such as a `.Channel`) to use
@@ -276,10 +283,6 @@ class SSHClient (ClosingContextManager):
             Indicates whether or not the DNS is trusted to securely
             canonicalize the name of the host being connected to (default
             ``True``).
-        :param float banner_timeout: an optional timeout (in seconds) to wait
-            for the SSH banner to be presented.
-        :param float auth_timeout: an optional timeout (in seconds) to wait for
-            an authentication response.
 
         :raises:
             `.BadHostKeyException` -- if the server's host key could not be
@@ -293,10 +296,16 @@ class SSHClient (ClosingContextManager):
         .. versionchanged:: 1.15
             Added the ``banner_timeout``, ``gss_auth``, ``gss_kex``,
             ``gss_deleg_creds`` and ``gss_host`` arguments.
+        .. versionchanged:: 2.2
+            Added the ``auth_timeout`` argument.
         .. versionchanged:: 2.3
             Added the ``gss_trust_dns`` argument.
         .. versionchanged:: 2.4
             Added the ``passphrase`` argument.
+        .. versionchanged:: 2.9
+            Added ``handshake_timeout`` argument.
+            Re-ordered arguments after ``key_filename``
+            (positional arguments usage seems unlikely, that far down the list).
         """
         if not sock:
             sock = retry_on_signal(
